@@ -1,4 +1,4 @@
-# 99baloons
+# 99balloons
 🎈⌖🎯⌖ Balloon shooting game
 
 ## Intro
