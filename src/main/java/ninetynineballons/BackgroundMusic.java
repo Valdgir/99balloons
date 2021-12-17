@@ -5,6 +5,8 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Sound includes MIDI music.
@@ -12,7 +14,9 @@ import java.io.IOException;
  * @author Valdgir
  * @version $Id$
  */
-public class BackgroundMusic {
+public class BackgroundMusic implements Runnable, AutoCloseable {
+    private static final Logger LOG = Logger.getLogger(BackgroundMusic.class.getName());
+
     private Sequencer sequencer;
 
     public BackgroundMusic() throws MidiUnavailableException, InvalidMidiDataException, IOException {
@@ -22,7 +26,6 @@ public class BackgroundMusic {
             sequencer = MidiSystem.getSequencer();
             sequencer.setSequence(MidiSystem.getSequence(midiFile));
             sequencer.open();
-            sequencer.start();
         }
 
     }
@@ -30,6 +33,7 @@ public class BackgroundMusic {
     /**
      * Close the MidiDevice & free resources
      */
+    @Override
     public void close() {
 
         if (sequencer != null) {
@@ -43,4 +47,12 @@ public class BackgroundMusic {
         return sequencer;
     }
 
+    @Override
+    public void run() {
+
+        if (sequencer != null) {
+            sequencer.start();
+        }
+
+    }
 }
